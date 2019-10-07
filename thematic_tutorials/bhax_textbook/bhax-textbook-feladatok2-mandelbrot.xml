@@ -246,24 +246,35 @@
         </para>
     </section>        
 
+	
     <section>
-        <title>
-            <emphasis role="cadiumgreen">BPEL Helló, Világ! - egy visszhang folyamat</emphasis>
-        </title>
+        <title>BPEL Helló, Világ! egy visszhang folyamat</title>
         <para>
-            Egy visszhang folyamat megvalósítása az alábbi teljes „videó tutoriál” alapján:
-            <link xlink:href="https://youtu.be/0OnlYWX2v_I">https://youtu.be/0OnlYWX2v_I</link>
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            <emphasis role="strong">Tanulságok, tapasztalatok, magyarázat...</emphasis>
-        </para>
-    </section>        
+		Egy visszhang folyamat megvalósítása az alábbi teljes videó tutoriál ” alapján: https://youtu.be/0OnlYWX2v_I
+	</para>	
+	<para>
+		A feladat megoldásához először le kell töltenünk az alábbi linkekről néhány dolgot:
+			https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-ee-developers
+			https://tomcat.apache.org/download-90.cgi
+			www.apache.org/dyn/closer.cgi/ode/apache-ode-war-1.3.8.zip
+	 	ezzel feltelepítjük a BPEL Designer pluginokat Eclipsbe és konfigurációkat az Apache Tomcat 8.5, Java JDK 9, Apache ODE, Eclipse Oxygen-nel.
+		Majd telep1tsük fel az Eclipse exe telep1tőjével azon belül a Eclipse IDE for Java Developers csomagot, majd kattintsunk a Launch gombra, az alapértelmezett munkaállománnyal indítsuk el a programot. Majd az üdvözlőlap kiixelése után kattintsunk a Help/Install New Software menüpontra. Majd a work with fülnél kiválasztjuk az Oxygen csomagot, majd a találatok közül az SOA Development-ből a BPEL Commons, BPEL Runtime Adapter, BPEL Visual Designer kiegészítőket telepítjük elfogadva a licenszet, ezzel újraindul az Eclipse.                                                                                        
+		Az Apache-ode-war mappából az ode.war fájlt másoljuk át az Apache-tomcat/webapps mappába, így az Apache-ode-war mappára már nem s lesz szükségünk. Majd egy parancssort nyitva a cd paranccsal belépünk az Apache-tomcat/bin mappába, ahol a chod a+x catalina.sh paranccsal írási jogot adunk a catalina.sh fájlra minden felhasználó számára. Majd ./catalina.sh run paranccsal futtatjuk a fájlt, ezzel elindul a tomcat szerver.                       
+	   	Majd miután újraindult az Eclapse az alsó részen ráklikkelünk a Servers fülre, majd ráklikkelünk a kék aláhúzott linkre ami azt írja jelenleg nincs elérhető szerver, kattintsunk rá a létrehozáshoz. Ráklikkelünk majd az Apache-n belül az Ode v1.xServer típúsu-t szervert válasszuk ki. Majd az ODE és a TOMCAT home könyvtárának beállítjuk a Apache-tomcat/webapps/ode mappa elérését, melyet ha megtaláltunk a cd paranccsal akkor a pwd paranccsal kiirathatjuk az elérérsét a home könytvártól, amit ugye felhasználunk a TOMCAT és ODE home könyvtárának. 
+		Majd a létrehozott szerveren való beállítások eléréséhez ráklikkelünk a létrehozott szerverre a Servers fül alatt ugye, majd az Open Launch Configuration-re, majd az Arguments füére klikkelve a VM Arguments részből kitöröljük a -Djava.endorsed.dirs.../endorsed" részt. Majd a Classpath fülre kattintva a User entriesüt kijelölve kattintunk a Add Extrenal JARs-ra, ahol a Downloads fülre kattintva az Apach-tomcat/bin/tomcat-juli.rar fájlt megnyitjuk, így hozzáadtuk a User Entries-hez. Ezzel a szerverünk működik az Eclipse-ben is, jobb egérgombbal kattintva a Servers fül alatt a szerverünkre majd a Start gombbal elindíthatjuk és a Stop gombbal megállíthatjuk.
+		Majd az Eclipse File/New/Other/BPEL/BPEL Project fülére kattintva megnyitjuk a projekt varázslót, ahol nevet adunk a projektünknek, például HelloWorld és a Target runtime fülnél kiválasztjuk a szerverünket, majd megadjuk a tartalom mappa nevét is, például bpelContent. Ezzel létrehozzuk a HelloWorld nevű projektünket, amin még kell beállításokat végeznünk.
+		Majd lenyitjuk a HelloWorld projekt fülét és jobb klikkelünk a bpelContent-re majd New/Other-re ahol BPEL Process File-t választjuk ki majd megadjuk a Process nénvek a HelloWorld nevet például és a Namespace-ban a http://helloworld.localhost, majd a következőre klikkelünk, ahol a Sablon fülnél az egyidejű BPEL process-et választjuk, illetve a Service address-t http://localhost:8080/ode/process/HelloWorld azonosítót adjuk. Ezzel megkapjuk az ábrát a workspace felületen.
+		Majd a FIX_ME-Add_Business_Logic_Here-t kijelöljük és alul a Properties fülre klikkelünk, majd a Description-on belül a Name mezőt átírjuk Assign-ra. Majd a Details fülre kattintva a 4-es számra klikkelve a New-ra kattintunk majd a From rész input/payload/input:string és a To rész output/payload/result:string mezőket kijelölve a munkafelületre kattintva generáljuk a változókat.
+		Majd a HelloWorldArtifacts.wsdl fájlt megnyitva a Properties/General/Address mezőt átírjuk http://localhost:8080/ode//process/HelloWorld-re. Majd rákattintunk a nyilak közti négyzetre és a Generate Binding Connect-re klikkelve létrehozzuk a kapcsolatot. 
+		Majd a bpelContent/new/other/BPEL/BPEL Developement Descriptor-t hozunk létre. Miután létrehoztuk a munkaablakban beállítjuk az Associated Port mező értékét HelloWorldPort-ra.
+		Majd a szerverünkre a Servers fül alatt jobb klikkelünk és Add and Remove-ra kattintunk, ahol a HelloWorld-öt kijelölve Add-ra kattintva hozzáadjuk a szerverhez. Majd jobb klikkelve Start gombra nyomva elindítjuk a szervert és a HelloWorldArtifacts.wsdl-en jobb klikkelve majd Web Services/Test with Web Services Explorer-re kattintunk, majd a munkablakban a Name/process-re kattintva megkapjuk az input mezőt, ahova beírunk random szöveget majd a Go!-ra kattintva megkapjuk a result-ba ugyanazt, tehát működik a szerver.                                                       
+	    </para>
+	                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="BPEL.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+	</section>       
      
     <section>
         <title>
@@ -380,14 +391,12 @@
 	}
 \end{umlpackage}
             ]]></programlisting>
-            <figure>
-                <title>OOCWC UML diagram 2</title>
-                    <mediaobject>
+                              <mediaobject>
                         <imageobject>
                             <imagedata fileref="../../attention_raising/Source/Reverse engineering/TexUML/texuml2.png" format="PNG" scale="200"/>
                         </imageobject>
                     </mediaobject>
-            </figure>
-        </para>
-    </section>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+	    </para>
+    </section> 
+
 </chapter>                
